@@ -1,0 +1,19 @@
+language: bash
+services: docker
+sudo: required
+
+env:
+  - IMAGE=snapcast-shairport
+
+install:
+  - docker run --rm --privileged multiarch/qemu-user-static:register
+
+script:
+  - cd ${IMAGE}
+  - make build
+  - docker images
+
+after_success:
+  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+      make push ;
+    fi
