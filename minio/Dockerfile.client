@@ -1,0 +1,19 @@
+FROM arm32v6/golang:alpine AS builder
+
+COPY qemu-arm-static /usr/bin/qemu-arm-static
+
+RUN apk add --no-cache git && \
+	git clone https://github.com/minio/mc && \
+	cd mc && \
+	go-wrapper download && \
+	go-wrapper install -ldflags "$(go run buildscripts/gen-ldflags.go)"
+
+FROM arm32v6/alpine:latest
+
+COPY qemu-arm-static /usr/bin/qemu-arm-static
+COPY --from=builder /go/bin/mc /usr/bin/
+
+RUN apk add --no-cache ca-certificates && \
+	chmod +x /usr/bin/mc
+
+ENTRYPOINT ["mc"]
