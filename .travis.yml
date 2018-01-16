@@ -7,7 +7,7 @@ env:
   - IMAGE=minio
 
 install:
-  - docker run --rm --privileged multiarch/qemu-user-static:register
+  - docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
 script:
   - cd ${IMAGE}
