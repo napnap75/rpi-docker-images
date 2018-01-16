@@ -5,6 +5,7 @@ COPY qemu-arm-static /usr/bin/qemu-arm-static
 RUN apk add --no-cache git make bash perl gcc musl-dev && \
 	go get -d github.com/minio/mc && \
 	cd ${GOPATH}/src/github.com/minio/mc && \
+	echo "---------> $(go run buildscripts/gen-ldflags.go) <---------" && \
 	make
 #	git clone https://github.com/minio/mc && \
 #	cd mc && \
