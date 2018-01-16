@@ -2,11 +2,14 @@ FROM arm32v6/golang:1.9.1-alpine3.6 AS builder
 
 COPY qemu-arm-static /usr/bin/qemu-arm-static
 
-RUN apk add --no-cache git && \
-	git clone https://github.com/minio/mc && \
-	cd mc && \
-	go-wrapper download && \
-	go-wrapper install -ldflags "$(go run buildscripts/gen-ldflags.go)"
+RUN apk add --no-cache git make bash perl gcc musl-dev && \
+	go get -d github.com/minio/mc && \
+	cd ${GOPATH}/src/github.com/minio/mc && \
+	make
+#	git clone https://github.com/minio/mc && \
+#	cd mc && \
+#	go-wrapper download && \
+#	go-wrapper install -ldflags "$(go run buildscripts/gen-ldflags.go)"
 
 FROM arm32v6/alpine:3.6
 
