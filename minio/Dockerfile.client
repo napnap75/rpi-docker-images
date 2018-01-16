@@ -1,4 +1,4 @@
-FROM arm32v6/golang:alpine AS builder
+FROM golang:1.8-alpine AS builder
 
 COPY qemu-arm-static /usr/bin/qemu-arm-static
 
@@ -8,7 +8,7 @@ RUN apk add --no-cache git && \
 	go-wrapper download && \
 	go-wrapper install -ldflags "$(go run buildscripts/gen-ldflags.go)"
 
-FROM arm32v6/alpine:latest
+FROM alpine:3.5
 
 COPY qemu-arm-static /usr/bin/qemu-arm-static
 COPY --from=builder /go/bin/mc /usr/bin/
