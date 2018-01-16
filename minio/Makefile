@@ -12,6 +12,8 @@ build-client:
 
 test:
 	docker run --rm -e "MINIO_ACCESS_KEY=access_key" -e "MINIO_SECRET_KEY=secret_key" --name minio -d napnap75/rpi-minio:server server /data
+	sleep 10
+	docker logs minio
 	mkdir mc_config
 	docker run --rm -v ${PWD}/mc_config:/root/.mc --link minio napnap75/rpi-minio:client config host add test http://minio:9000 access_key secret_key
 	docker run --rm -v ${PWD}/mc_config:/root/.mc --link minio napnap75/rpi-minio:client mb test/test
