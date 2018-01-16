@@ -19,8 +19,6 @@ test:
 	docker run --rm -v ${PWD}/mc_config:/root/.mc --link minio napnap75/rpi-minio:client mirror test/test/ /root/.mc/test/
 	docker run --rm -v ${PWD}/mc_config:/root/.mc --link minio napnap75/rpi-minio:client cp /usr/bin/mc /root/.mc/test/mc.origin
 	diff mc_config/test/mc.origin mc_config/test/mc
-	rm -fr mc_config mc_config
-	docker stop minio
 
 push: push-server push-client
 
@@ -33,5 +31,6 @@ push-client:
 	docker push napnap75/rpi-minio:client
 
 clean:
-	rm -fr qemu-arm-static*
+	rm -fr qemu-arm-static* mc_config
+	docker stop minio || true
 	docker image prune -f
