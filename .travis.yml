@@ -11,8 +11,7 @@ install:
 
 script:
   - cd ${IMAGE}
-  - make build
-  - make test
+  - make build && make test
   - docker images
 
 after_success:
