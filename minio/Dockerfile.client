@@ -1,8 +1,17 @@
+FROM golang:1.8-alpine AS builder
+ 
+COPY qemu-arm-static /usr/bin/qemu-arm-static
+ 
+RUN apk add --no-cache git && \
+	go get -v -d github.com/minio/mc && \
+	cd /go/src/github.com/minio/mc && \
+	env GOOS=linux GOARCH=arm go install -v -ldflags "$(go run buildscripts/gen-ldflags.go)" && \
+	ls -al /go/src/github.com/minio/mc
+
 FROM arm32v6/alpine:3.6
 
 COPY qemu-arm-static /usr/bin/qemu-arm-static
-
-ADD https://dl.minio.io/client/mc/release/linux-arm/mc /usr/bin/
+COPY --from=builder /go/bin/linux_arm/mc /usr/bin/
 
 RUN apk add --no-cache ca-certificates && \
 	chmod +x /usr/bin/mc
