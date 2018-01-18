@@ -1,4 +1,4 @@
-FROM golang:1.8-alpine AS builder
+FROM golang:1.10-rc-alpine3.7 AS builder
  
 COPY qemu-arm-static /usr/bin/qemu-arm-static
  
@@ -8,7 +8,7 @@ RUN apk add --no-cache git && \
 	env GOOS=linux GOARCH=arm go install -v -ldflags "$(go run buildscripts/gen-ldflags.go)" && \
 	ls -al /go/src/github.com/minio/mc
 
-FROM arm32v6/alpine:3.6
+FROM arm32v6/alpine:3.7
 
 COPY qemu-arm-static /usr/bin/qemu-arm-static
 COPY --from=builder /go/bin/linux_arm/mc /usr/bin/
