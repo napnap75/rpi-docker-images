@@ -2,12 +2,13 @@ all: build push clean
 
 build: build-server build-client
 
-build-server:
-	if [ ! -f qemu-arm-static ]; then curl -L -o qemu-arm-static.tar.gz https://github.com/multiarch/qemu-user-static/releases/download/v2.9.1-1/qemu-arm-static.tar.gz && tar xzf qemu-arm-static.tar.gz ; fi
+build-pre:
+	if [ ! -f qemu-arm-static ]; then curl -L https://github.com/resin-io/qemu/releases/download/v2.9.0%2Bresin1/qemu-2.9.0.resin1-arm.tar.gz | tar xz --strip-components=1 ; fi
+
+build-server: build-pre
 	docker build -t napnap75/rpi-minio:server -f Dockerfile.server .
 
-build-client:
-	if [ ! -f qemu-arm-static ]; then curl -L -o qemu-arm-static.tar.gz https://github.com/multiarch/qemu-user-static/releases/download/v2.9.1-1/qemu-arm-static.tar.gz && tar xzf qemu-arm-static.tar.gz ; fi
+build-client: build-pre
 	docker build -t napnap75/rpi-minio:client -f Dockerfile.client .
 
 test:
