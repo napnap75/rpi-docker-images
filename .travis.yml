@@ -4,6 +4,7 @@ sudo: required
 
 env:
   - IMAGE=snapcast-shairport
+  - IMAGE=s6-alpine
 
 install:
   - docker run --rm --privileged multiarch/qemu-user-static:register
