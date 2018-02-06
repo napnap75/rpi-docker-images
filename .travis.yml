@@ -4,6 +4,7 @@ sudo: required
 
 env:
   - IMAGE=snapcast-shairport
+  - IMAGE=snips-display-handler
   - IMAGE=s6-alpine
 
 install:
