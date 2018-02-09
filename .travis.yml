@@ -6,6 +6,7 @@ env:
   - IMAGE=snapcast-shairport
   - IMAGE=snips-display-handler
   - IMAGE=s6-alpine
+  - IMAGE=gandi
 
 install:
   - docker run --rm --privileged multiarch/qemu-user-static:register
