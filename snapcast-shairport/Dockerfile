@@ -22,5 +22,5 @@ RUN apk add --no-cache avahi-libs flac libvorbis dbus alsa-lib libdaemon popt li
 COPY --from=builder /root/shairport-sync/shairport-sync /root/snapcast/server/snapserver /usr/local/bin/
 COPY start.sh /usr/local/bin
 
-ENV AIRPLAY_NAME=snapcast
+ENV AIRPLAY_NAME=snapcast BUFFER_SIZE=1000
 CMD /usr/local/bin/start.sh
