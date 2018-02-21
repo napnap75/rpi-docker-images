@@ -4,6 +4,7 @@ sudo: required
 
 env:
   - IMAGE=snapcast-shairport
+  - IMAGE=minio
   - IMAGE=snips-display-handler
   - IMAGE=s6-alpine
   - IMAGE=gandi
@@ -13,7 +14,7 @@ env:
   - IMAGE=nextcloud VERSION=13.0 VARIANT=apache
 
 install:
-  - docker run --rm --privileged multiarch/qemu-user-static:register
+  - docker run --rm --privileged multiarch/qemu-user-static:register --credential yes
 
 script:
   - cd ${IMAGE}
@@ -21,6 +22,6 @@ script:
   - docker images
 
 after_success:
-  - if [ "$TRAVIS_BRANCH" == "master" ]; then
+  - if [ "${TRAVIS_BRANCH}" == "master" ]; then
       make push ;
     fi
