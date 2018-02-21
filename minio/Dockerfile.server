@@ -8,7 +8,7 @@ RUN apk add --no-cache git && \
 FROM arm32v6/alpine:3.6
 
 COPY qemu-arm-static /usr/bin/qemu-arm-static
-COPY --from=builder /go/src/github.com/minio/minio/dockerscripts/docker-entrypoint.sh /go/src/github.com/minio/minio/dockerscripts/healthcheck.sh /go/bin/minio /usr/bin/
+COPY --from=builder /go/src/github.com/minio/minio/dockerscripts/docker-entrypoint.sh /go/src/github.com/minio/minio/dockerscripts/healthcheck.sh /go/bin/linux_arm/minio /usr/bin/
 
 ENV MINIO_UPDATE=off \
 	MINIO_ACCESS_KEY_FILE=access_key \
