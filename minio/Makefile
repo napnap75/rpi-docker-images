@@ -1,6 +1,6 @@
 all: build push clean
 
-build: build-server build-client
+build: build-server build-client test
 
 build-pre:
 	if [ ! -f qemu-arm-static ]; then curl -L https://github.com/resin-io/qemu/releases/download/v2.9.0%2Bresin1/qemu-2.9.0.resin1-arm.tar.gz | tar xz --strip-components=1 ; fi
