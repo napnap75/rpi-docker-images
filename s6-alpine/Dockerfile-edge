@@ -13,4 +13,8 @@ FROM arm32v6/alpine:edge
 
 COPY --from=builder /tmp/s6-overlay /
 COPY --from=builder /tmp/qemu-arm-static /usr/bin 
+
+RUN sed -i "s/v3.7/edge/g" /etc/apk/repositories \
+	&& apk upgrade --no-cache
+
 ENTRYPOINT ["/init"]
