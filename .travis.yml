@@ -3,6 +3,7 @@ services: docker
 sudo: required
 
 env:
+  - IMAGE=sshd-gateway
   - IMAGE=snapcast-shairport
   - IMAGE=minio
   - IMAGE=snips-display-handler
