@@ -3,12 +3,12 @@ FROM golang:alpine3.6 AS builder
 RUN apk add --no-cache git && \
 	go get -v -d github.com/minio/minio && \
 	cd /go/src/github.com/minio/minio && \
-	env GOOS=linux GOARCH=arm GOARM=6 go install -v -ldflags "$(go run buildscripts/gen-ldflags.go)"
+	env GOOS=linux GOARCH=arm GOARM=6 go build -o /go/bin/minio -v -ldflags "$(go run buildscripts/gen-ldflags.go)"
 
 FROM arm32v6/alpine:3.6
 
 COPY qemu-arm-static /usr/bin/qemu-arm-static
-COPY --from=builder /go/src/github.com/minio/minio/dockerscripts/docker-entrypoint.sh /go/src/github.com/minio/minio/dockerscripts/healthcheck.sh /go/bin/linux_arm/minio /usr/bin/
+COPY --from=builder /go/src/github.com/minio/minio/dockerscripts/docker-entrypoint.sh /go/src/github.com/minio/minio/dockerscripts/healthcheck.sh /go/bin/minio /usr/bin/
 
 ENV MINIO_UPDATE=off \
 	MINIO_ACCESS_KEY_FILE=access_key \
