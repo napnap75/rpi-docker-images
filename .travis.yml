@@ -3,6 +3,7 @@ services: docker
 sudo: required
 
 env:
+  - IMAGE=borg
   - IMAGE=slack-eraser
   - IMAGE=sshd-gateway
   - IMAGE=snapcast-shairport

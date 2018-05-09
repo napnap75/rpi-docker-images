@@ -1,0 +1,15 @@
+FROM napnap75/rpi-alpine-s6:3.7
+
+RUN apk add --no-cache bash borgbackup openssh-server \
+	&& adduser -s /bin/bash -D borg \
+	&& passwd -u borg \
+	&& mkdir /home/borg/.ssh \
+	&& chmod 700 /home/borg/.ssh \
+	&& chown borg: /home/borg/.ssh \
+	&& mkdir /run/sshd
+
+ADD etc /etc/
+
+VOLUME /config /backup
+
+CMD /usr/sbin/sshd -D -e
