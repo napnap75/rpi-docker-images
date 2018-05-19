@@ -9,8 +9,9 @@ FROM arm32v6/python:alpine3.7
 
 COPY --from=builder /tmp/qemu-arm-static /usr/bin 
 
-RUN pip install slacker
+RUN apk add --no-cache bash curl \
+	&& pip install slacker
 
 ADD slack-eraser.py /
 
-ENTRYPOINT ["python", "/slack-eraser.py"]
+CMD ["python", "/slack-eraser.py"]
