@@ -1,0 +1,25 @@
+HostKey /config/host_keys/ssh_host_rsa_key
+HostKey /config/host_keys/ssh_host_ed25519_key
+
+Protocol 2
+KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+
+#LogLevel DEBUG
+PermitRootLogin no
+
+PubkeyAuthentication yes
+AuthorizedKeysFile	/config/users_keys/%u
+IgnoreUserKnownHosts yes
+PasswordAuthentication no
+ChallengeResponseAuthentication no
+
+AllowAgentForwarding no
+AllowTcpForwarding no
+GatewayPorts no
+X11Forwarding no
+PrintMotd no
+UseDNS no
+
+Subsystem sftp internal-sftp
+
+AllowUsers
