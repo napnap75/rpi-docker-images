@@ -9,7 +9,7 @@ FROM arm32v6/python:alpine3.7
 
 COPY --from=builder /tmp/qemu-arm-static /usr/bin
 
-RUN apk add --no-cache openssh-client borgbackup \
+RUN apk add --no-cache bash curl openssh-client borgbackup \
 	&& pip install borgmatic
 
 CMD borgmatic

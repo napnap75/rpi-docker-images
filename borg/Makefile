@@ -9,8 +9,7 @@ build-borgmatic:
 build-server:
 	docker build -t napnap75/rpi-borg:server -f Dockerfile.server .
 
-push:
-	push-borg push-borgmatic push-server
+push: push-borg push-borgmatic push-server
 
 push-init:
 	if [ "${DOCKER_USERNAME}" != "" ]; then docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}" ; fi
