@@ -1,34 +1,30 @@
 #! /bin/bash
 
+set -x
+
 cp /etc/ssh/sshd_config.default /etc/ssh/sshd_config
 
 function init_user {
 	# First create the user
 	options=
-	if [[ $3 != "" ]]; then
+	if [[ "$3" != "" ]]; then
 		options+="-u $3 "
 	fi
-	if [[ $4 != "" ]]; then
+	if [[ "$4" != "" ]]; then
 		grep ":$4:" /etc/group || addgroup -g $4 "group-$4"
 		options+="-G `getent group $4 | sed 's/:.*//'` "
 	fi
-	if [[ $5 != "" ]]; then
+	if [[ "$5" != "" ]]; then
 		options+="-h $5 "
 	else
 		options+="-h /home/$1 "
 	fi
-	if [[ $2 = "ssh" || $2 = "borg" || $2 = "rsync" ]]; then
+	if [[ "$2" = "ssh" || "$2" = "borg" || "$2" = "rsync" ]]; then
 		adduser -D $options -s /bin/bash $1
 	else
 		adduser -D $options -s /bin/false $1
 	fi
 	passwd -u $1
-
-	# Create the home directory if necessary
-	if [[ $5 != "" && ! -d $5 ]]; then
-		mkdir -p $5
-		chown -R `id -u $1`:`id -g $1` $5
-	fi
 
 	# Adjust the keys permissions
 	chown $1 /config/users_keys/$1
@@ -41,6 +37,7 @@ function init_user {
 		echo "  ForceCommand internal-sftp" >> /etc/ssh/sshd_config
 		if [[ $6 != "" ]]; then
 			echo "  ChrootDirectory $6" >> /etc/ssh/sshd_config
+			chown root:root $6
 		fi
 	elif [[ $2 = "borg" ]]; then
 		echo "Match User $1" >> /etc/ssh/sshd_config

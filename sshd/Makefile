@@ -3,10 +3,10 @@ build:
 
 
 test: build
-	docker run --rm -it -v test-sshd:/config -v ${PWD}/test-config.ini:/config/config.ini -p 2200:22 napnap75/rpi-sshd
+	docker run --rm -it -v test-sshd:/config -p 2200:22 napnap75/rpi-sshd
 
 test-bash: build
-	docker run --rm -it -v test-sshd:/config -v ${PWD}/test-config.ini:/config/config.ini -p 2200:22 napnap75/rpi-sshd /bin/bash
+	docker run --rm -it -v test-sshd:/config -p 2200:22 napnap75/rpi-sshd /bin/bash
 
 
 push-init:
