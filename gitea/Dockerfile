@@ -6,8 +6,7 @@ RUN apk add --no-cache curl \
   && tar xzf /tmp/qemu-arm-static.tar.gz -C /tmp \
   && while [ "$GITEA_DOWNLOAD_URL" == "" ] ; do GITEA_DOWNLOAD_URL=$(curl -s https://api.github.com/repos/go-gitea/gitea/releases/latest | grep "browser_download_url" | grep "arm-6.xz\"" | cut -d\" -f4) ; done \
   && curl --retry 3 -L -s -o /tmp/gitea-linux-arm-6.xz $GITEA_DOWNLOAD_URL \
-  && unxz /tmp/gitea-linux-arm-6.xz \
-  && mv /tmp/gitea-*-linux-arm-6 /tmp/gitea
+  && unxz -c /tmp/gitea-linux-arm-6.xz > /tmp/gitea
   
 FROM arm32v6/alpine:3.7
 COPY --from=builder /tmp/qemu-arm-static /usr/bin
