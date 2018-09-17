@@ -29,4 +29,5 @@ CMD ["/bin/s6-svscan", "/etc/s6"]
 
 COPY docker /
 COPY --from=builder /tmp/gitea /app/gitea/gitea
-RUN ln -s /app/gitea/gitea /usr/local/bin/gitea
+RUN chmod +x /app/gitea/gitea \
+    && ln -s /app/gitea/gitea /usr/local/bin/gitea
