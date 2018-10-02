@@ -19,8 +19,8 @@ env:
   - IMAGE=snips-display-handler
   - IMAGE=s6-alpine
   - IMAGE=gandi
-  - IMAGE=nextcloud VERSION=12.0 VARIANT=fpm
-  - IMAGE=nextcloud VERSION=12.0 VARIANT=apache
+  - IMAGE=nextcloud VERSION=14.0 VARIANT=fpm
+  - IMAGE=nextcloud VERSION=14.0 VARIANT=apache
   - IMAGE=nextcloud VERSION=13.0 VARIANT=fpm
   - IMAGE=nextcloud VERSION=13.0 VARIANT=apache
 
