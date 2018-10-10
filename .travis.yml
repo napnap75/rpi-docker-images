@@ -16,7 +16,7 @@ env:
   - IMAGE=slack-eraser
   - IMAGE=sshd-gateway
   - IMAGE=snapcast-shairport
-  - IMAGE=snips-display-handler
+  - IMAGE=snips-button-handler
   - IMAGE=s6-alpine
   - IMAGE=gandi
   - IMAGE=nextcloud VERSION=14.0 VARIANT=fpm
