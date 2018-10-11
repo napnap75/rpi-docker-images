@@ -1,9 +1,9 @@
-FROM alpine:3.8 AS builder
+FROM alpine:latest AS builder
 
 ADD https://github.com/multiarch/qemu-user-static/releases/download/v2.6.0/qemu-arm-static.tar.gz /tmp
 RUN tar xzf /tmp/qemu-arm-static.tar.gz -C /tmp
 
-FROM alpine:3.8
+FROM arm32v6/alpine:latest
 
 COPY --from=builder /tmp/qemu-arm-static /usr/bin
 
