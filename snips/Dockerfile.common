@@ -1,0 +1,18 @@
+FROM alpine:latest AS builder
+
+RUN apk add --no-cache curl \
+	&& while [ "$QEMU_DOWNLOAD_URL" == "" ] ; do QEMU_DOWNLOAD_URL=$(curl -s https://api.github.com/repos/multiarch/qemu-user-static/releases/latest | grep "browser_download_url" | grep "\/qemu-arm-static.tar.gz" | cut -d\" -f4) ; done \
+	&& curl --retry 3 -L -s -o /tmp/qemu-arm-static.tar.gz $QEMU_DOWNLOAD_URL \
+	&& tar xzf /tmp/qemu-arm-static.tar.gz -C /tmp
+
+FROM arm32v7/debian:stretch-slim
+
+COPY --from=builder /tmp/qemu-arm-static /usr/bin
+
+RUN apt-get update \
+	&& apt-get install -y dirmngr apt-transport-https \
+	&& bash -c 'sed -i "s/stretch main/stretch main non-free/" /etc/apt/sources.list' \
+	&& bash -c 'echo "deb https://raspbian.snips.ai/stretch stable main" > /etc/apt/sources.list.d/snips.list' \
+	&& if ! apt-key adv --keyserver pgp.mit.edu --recv-keys D4F50CDCA10A2849 ; then apt-key adv --keyserver pgp.surfnet.nl --recv-keys D4F50CDCA10A2849 ; fi \
+	&& apt-get update \
+	&& apt-get install -y snips-platform-common

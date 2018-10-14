@@ -16,6 +16,7 @@ env:
   - IMAGE=slack-eraser
   - IMAGE=sshd-gateway
   - IMAGE=snapcast-shairport
+  - IMAGE=snips
   - IMAGE=snips-button-handler
   - IMAGE=s6-alpine
   - IMAGE=gandi

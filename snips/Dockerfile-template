@@ -1,0 +1,5 @@
+FROM napnap75/rpi-snips:common
+
+RUN apt-get install -y snips-template
+
+CMD /usr/bin/snips-template
