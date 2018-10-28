@@ -1,7 +1,5 @@
 #! /bin/bash
 
-set -x
-
 cp /etc/ssh/sshd_config.default /etc/ssh/sshd_config
 
 function init_user {
