@@ -69,11 +69,11 @@ for sectionName in config.sections():
 						continue
 			if searchFrom != None and searchFrom != message['username']:
 				if args.verbose != None and args.verbose > 1:
-					print(text, "--> Skipped (From)")
+					print(text, "--> Skipped (From '", message['username'], "' != '", searchFrom, "')")
 				continue
 			if searchIn != None and searchIn != message['channel']['name']:
 				if args.verbose != None and args.verbose > 1:
-					print(text, "--> Skipped (In)")
+					print(text, "--> Skipped (In '", message['channel']['name'], "' != '", searchIn, "')")
 				continue
 
 			key = text
@@ -130,11 +130,11 @@ for sectionName in config.sections():
 						continue
 			if searchFrom != None and searchFrom != message['username']:
 				if args.verbose != None and args.verbose > 1:
-					print(text, "--> Skipped (From)")
+					print(text, "--> Skipped (From '", message['username'], "' != '", searchFrom, "')")
 				continue
 			if searchIn != None and searchIn != message['channel']['name']:
 				if args.verbose != None and args.verbose > 1:
-					print(text, "--> Skipped (In)")
+					print(text, "--> Skipped (In '", message['channel']['name'], "' != '", searchIn, "')")
 				continue
 
 			status = None
