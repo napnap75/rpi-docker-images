@@ -1,0 +1,9 @@
+FROM napnap75/rpi-snips:common
+
+RUN apt-get install -y python python-pip virtualenv snips-template snips-skill-server git locales \
+	&& echo "fr_FR ISO-8859-1" > /etc/locale.gen \
+	&& dpkg-reconfigure -f noninteractive locales
+
+COPY snips-skill-server.sh /usr/local/bin
+
+CMD /usr/local/bin/snips-skill-server.sh
