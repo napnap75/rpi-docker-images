@@ -1,4 +1,4 @@
-FROM alpine:edge AS builder
+FROM alpine:latest AS builder
 
 RUN apk add --no-cache curl \
 	&& while [ "$S6_DOWNLOAD_URL" == "" ] ; do S6_DOWNLOAD_URL=$(curl -s https://api.github.com/repos/just-containers/s6-overlay/releases/latest | grep "browser_download_url" | grep "s6-overlay-armhf.tar.gz\"" | cut -d\" -f4) ; done \
@@ -9,12 +9,12 @@ RUN apk add --no-cache curl \
 	&& curl --retry 3 -L -s -o /tmp/qemu-arm-static.tar.gz $QEMU_DOWNLOAD_URL \
 	&& tar xzf /tmp/qemu-arm-static.tar.gz -C /tmp
 
-FROM arm32v6/alpine:edge
+FROM arm32v6/alpine:latest
 
 COPY --from=builder /tmp/s6-overlay /
 COPY --from=builder /tmp/qemu-arm-static /usr/bin 
 
-RUN sed -i "s/v3.7/edge/g" /etc/apk/repositories \
+RUN sed -i -r "s#/v[0-9\.]+/#/edge/#g" /etc/apk/repositories \
 	&& apk upgrade --no-cache
 
 ENTRYPOINT ["/init"]
