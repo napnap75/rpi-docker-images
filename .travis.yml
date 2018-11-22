@@ -10,6 +10,7 @@ notifications:
     on_success: change
     
 env:
+  - IMAGE=restic
   - IMAGE=docker-compose
   - IMAGE=picocms
   - IMAGE=gitea
