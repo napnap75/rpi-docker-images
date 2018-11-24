@@ -13,9 +13,9 @@ FROM arm32v6/alpine:latest
 
 COPY --from=builder qemu-arm-static restic /usr/bin/
 
-RUN apk add --no-cache bash curl jq openssh-client dcron
+RUN apk add --no-cache bash curl jq openssh-client dcron tzdata
 
-COPY restic-auto entrypoint.sh /usr/local/bin/
+COPY restic-auto docker-entrypoint.sh docker-command.sh /usr/local/bin/
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["/usr/sbin/crond", "-f", "-d"]
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["/usr/local/bin/docker-command.sh"]

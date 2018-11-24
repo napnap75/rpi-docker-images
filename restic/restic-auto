@@ -4,24 +4,8 @@
 function backup_dir {
 	# Check if the dir to backup is mounted as a subdirectory of /root inside this container
 	if [ -d "/root_fs$1" ] ; then
-		while true ; do
-			restic backup /root_fs$1 &> restic_check.log
-			if [ $? -ne 0 ]; then
-				if grep -q "repository is already locked by" restic_check.log ; then
-					echo "[INFO] Repository locked, waiting ... and trying to unlock before trying to backup again"
-					sleep $(($RANDOM % 600))
-					restic unlock
-					continue
-				else
-					echo "[ERROR] Unable to create repository"
-					cat restic_check.log
-					return $?
-				fi
-			else
-				cat restic_check.log
-				return 0
-			fi
-		done
+		restic backup /root_fs$1
+		return 0
 	else
 		echo "[ERROR] Directory $1 not found. Have you mounted the root fs from your host with the following option : '-v /:/root_fs:ro' ?"
 		return -1
@@ -30,28 +14,17 @@ function backup_dir {
 
 # Backup one file
 function backup_file {
-	while true ; do
-		cat $1 | restic backup --stdin --stdin-filename $2 &> restic_check.log
-		if [ $? -ne 0 ]; then
-			if grep -q "repository is already locked by" restic_check.log ; then
-				echo "[INFO] Repository locked, waiting ... and trying to unlock before trying to backup again"
-				sleep $(($RANDOM % 600))
-				restic unlock
-				continue
-			else
-				echo "[ERROR] Unable to create repository"
-				cat restic_check.log
-				return $?
-			fi
-		else
-			cat restic_check.log
-			return 0
-		fi
-	done
+	cat $1 | restic backup --stdin --stdin-filename $2 &> restic_check.log
+	return 0
 }
 
 # Find all the directories to backup and call backup_dir for each one
 function run_backup {
+	if [ "$(restic --no-lock list locks -q)" != "" ] ; then
+		echo "[INFO] Repository locked, trying to unlock"
+		restic unlock
+	fi
+
 	count_success=0
 	count_failure=0
 

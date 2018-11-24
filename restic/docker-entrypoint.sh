@@ -25,4 +25,11 @@ if [[ "$RESTIC_REPOSITORY" = sftp:* ]] ; then
 	echo "StrictHostKeyChecking no" >> /root/.ssh/config
 fi
 
+# Install the crontabs
+if [ -d /crontabs ] ; then
+	for f in /crontabs/* ; do
+		crontab -u $(basename $f) $f
+	done
+fi
+
 "$@"
