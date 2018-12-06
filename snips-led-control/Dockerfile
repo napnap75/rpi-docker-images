@@ -22,7 +22,8 @@ COPY --from=builder /tmp/qemu-arm-static /usr/bin
 COPY --from=python-builder /root/.cache /root/.cache
 COPY --from=python-builder /snipsLedControl /snipsLedControl
 
-RUN pip install RPi.GPIO spidev gpiozero paho-mqtt pytoml
+RUN pip install RPi.GPIO spidev gpiozero paho-mqtt pytoml \
+	&& sed -i "s/self._put(self._pattern.think)/print('.')/" /snipsLedControl/models/LedsController.py
 
 WORKDIR /snipsLedControl
 
