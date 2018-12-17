@@ -27,8 +27,8 @@ env:
   - IMAGE=gandi
   - IMAGE=nextcloud VERSION=14.0 VARIANT=fpm
   - IMAGE=nextcloud VERSION=14.0 VARIANT=apache
-  - IMAGE=nextcloud VERSION=13.0 VARIANT=fpm
-  - IMAGE=nextcloud VERSION=13.0 VARIANT=apache
+  - IMAGE=nextcloud VERSION=15.0 VARIANT=fpm
+  - IMAGE=nextcloud VERSION=15.0 VARIANT=apache
 
 install:
   - docker run --rm --privileged multiarch/qemu-user-static:register --credential yes
