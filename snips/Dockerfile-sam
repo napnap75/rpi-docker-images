@@ -10,4 +10,4 @@ FROM arm32v6/node:alpine
 COPY --from=builder /tmp/qemu-arm-static /usr/bin
 
 RUN apk add --no-cache openssh-keygen \
-	&& npm install -g snips-sam
+	&& npm install -V -g snips-sam
