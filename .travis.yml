@@ -35,7 +35,7 @@ install:
 
 script:
   - cd ${IMAGE}
-  - make build
+  - travis_wait make build
   - docker images
 
 after_success:
