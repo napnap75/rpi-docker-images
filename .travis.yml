@@ -10,6 +10,7 @@ notifications:
     on_success: change
     
 env:
+  - IMAGE=mqtt-warn
   - IMAGE=mqtt-watch
   - IMAGE=snips-led-control
   - IMAGE=restic
