@@ -6,8 +6,7 @@ RUN tar xzf /tmp/qemu-arm-static.tar.gz -C /tmp \
 	&& cd /tmp \
 	&& git clone https://github.com/jpmens/mqttwarn
 
-#FROM arm32v6/python:alpine3.7
-FROM python:2-alpine3.8
+FROM arm32v6/python:2-alpine3.8
 
 COPY --from=builder /tmp/qemu-arm-static /usr/bin
 COPY --from=builder /tmp/mqttwarn /mqttwarn
