@@ -4,5 +4,8 @@ mkdir -p /var/run/dbus
 dbus-uuidgen --ensure
 dbus-daemon --system
 avahi-daemon --daemonize --no-chroot
-/usr/local/bin/snapserver -b $BUFFER_SIZE -s "airplay:///shairport-sync?name=Airplay&devicename=$AIRPLAY_NAME"
-
+if [ -p /fifo/snapfifo ] ; then
+	/usr/local/bin/snapserver -b $BUFFER_SIZE -s "airplay:///shairport-sync?name=Airplay&devicename=$AIRPLAY_NAME" -s "pipe:///fifo/snapfifo?name=$STREAM_NAME"
+else
+	/usr/local/bin/snapserver -b $BUFFER_SIZE -s "airplay:///shairport-sync?name=Airplay&devicename=$AIRPLAY_NAME"
+fi
