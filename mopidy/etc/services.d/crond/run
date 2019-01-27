@@ -1,0 +1,3 @@
+#!/usr/bin/execlineb -P
+
+crond -b -L /var/log/cron.log && tail -f /var/log/cron.log
