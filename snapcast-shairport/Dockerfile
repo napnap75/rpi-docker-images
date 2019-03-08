@@ -4,10 +4,10 @@ RUN apk update \
 	&& apk add git build-base autoconf automake libtool alsa-lib-dev libdaemon-dev popt-dev libressl-dev soxr-dev avahi-dev libconfig-dev curl asio-dev flac-dev libvorbis-dev \
 	&& mkdir /root/shairport-sync \
 	&& cd /root/shairport-sync \
-	&& curl -L -o ./shairport-sync.tar.gz https://github.com/mikebrady/shairport-sync/archive/3.1.4.tar.gz \
+	&& curl -L -o ./shairport-sync.tar.gz https://github.com/mikebrady/shairport-sync/archive/3.2.2.tar.gz \
 	&& tar -zxvf shairport-sync.tar.gz --strip-components=1 \
 	&& autoreconf -i -f \
-	&& ./configure --with-stdout --with-avahi --with-ssl=openssl --with-soxr --with-metadata \
+	&& ./configure --with-stdout --with-pipe --with-avahi --with-ssl=openssl --with-soxr --with-metadata \
 	&& make \
 	&& cd /root \
 	&& git clone --recursive https://github.com/badaix/snapcast.git \
