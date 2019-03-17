@@ -1,0 +1,4 @@
+#!/usr/bin/with-contenv bash
+
+mkdir -p /music/pipes
+chown -R abc:abc /music/pipes

@@ -1,0 +1,6 @@
+#!/usr/bin/with-contenv bash
+
+. /etc/default/snapserver
+
+exec \
+        /usr/local/bin/snapserver $SNAPSERVER_OPTS
