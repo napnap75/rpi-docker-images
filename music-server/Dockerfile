@@ -9,15 +9,11 @@ RUN apk update \
 	&& tar xzf /tmp/shairport-sync.tar.gz --strip-components=1 \
 	&& autoreconf -i -f \
 	&& ./configure --with-stdout --with-pipe --with-avahi --with-ssl=openssl --with-soxr --with-metadata \
-	&& make \
-	&& cd /root \
-	&& git clone --recursive https://github.com/badaix/snapcast.git \
-	&& cd snapcast \
-	&& make server
+	&& make
 
 FROM linuxserver/daapd:arm32v6-latest
 
-COPY --from=builder /root/shairport-sync/shairport-sync /root/snapcast/server/snapserver /usr/local/bin/
+COPY --from=builder /root/shairport-sync/shairport-sync /usr/local/bin/
 
 RUN apk add --no-cache flac libvorbis alsa-lib libdaemon popt libressl soxr libconfig \
 	&& rm /etc/avahi/services/*
