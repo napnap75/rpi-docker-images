@@ -17,7 +17,7 @@ RUN apk update \
 
 FROM linuxserver/daapd:arm32v6-latest
 
-COPY --from=builder /usr/local/bin/shairport-sync /usr/local/bin/snapserver /usr/local/bin/
+COPY --from=builder /root/shairport-sync/shairport-sync /root/snapcast/server/snapserver /usr/local/bin/
 
 RUN apk add --no-cache flac libvorbis alsa-lib libdaemon popt libressl soxr libconfig \
 	&& rm /etc/avahi/services/*
