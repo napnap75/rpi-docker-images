@@ -6,24 +6,17 @@ build:
 		sed "s/template/$$template/g" Dockerfile-template > Dockerfile.$$template ; \
 		docker build -t napnap75/rpi-snips:$$template -f Dockerfile.$$template . ; \
 	done
-	docker build -t napnap75/rpi-snips:skill-server -f Dockerfile-skill-server . ; done
-
-build-sam:
-	docker build -t napnap75/rpi-snips:sam -f Dockerfile-sam . ; done
-
-push:
-	if [ "${DOCKER_USERNAME}" != "" ]; then docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}" ; fi
-	set -e ; for template in analytics asr audio-server hotword dialogue nlu skill-server tts watch ; do \
-		docker push napnap75/rpi-snips:$$template ; \
-		version=$$(docker run --rm -it napnap75/rpi-snips:$$template /usr/bin/snips-$$template --version | egrep -o "[0-9]+\.[0-9]+\.[0-9]+") ; \
-		docker tag napnap75/rpi-snips:$$template napnap75/rpi-snips:$$template-$$version ; \
-		docker push napnap75/rpi-snips:$$template-$$version ; \
+	set -e ; for template in sam skill-server ; do \
+		docker build -t napnap75/rpi-snips:$$template -f Dockerfile-$$template . ; \
 	done
 
-push-sam:
-	set -e ; for template in sam ; do \
+login:
+	if [ "${DOCKER_USERNAME}" != "" ]; then docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}" ; fi
+
+push: login
+	set -e ; for template in analytics asr audio-server hotword dialogue nlu sam skill-server tts watch ; do \
 		docker push napnap75/rpi-snips:$$template ; \
-		version=$$(docker run --rm -it napnap75/rpi-snips:$$template $$template --version | egrep -o "[0-9]+\.[0-9]+\.[0-9]+") ; \
+		version=$$(docker run --rm -it napnap75/rpi-snips:$$template /usr/bin/snips-$$template --version | egrep -o "[0-9]+\.[0-9]+\.[0-9]+") ; \
 		docker tag napnap75/rpi-snips:$$template napnap75/rpi-snips:$$template-$$version ; \
 		docker push napnap75/rpi-snips:$$template-$$version ; \
 	done
