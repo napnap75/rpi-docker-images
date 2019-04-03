@@ -11,6 +11,7 @@ notifications:
     
 env:
   - IMAGE=music-server
+  - IMAGE=mopidy-snapcast-controller
   - IMAGE=mopidy
   - IMAGE=mqtt-warn
   - IMAGE=mqtt-watch
