@@ -181,6 +181,23 @@ for sectionName in config.sections():
 			else:
 				if args.verbose != None:
 					print("Should have deleted message timestamp", message['ts'], "in channel", message['channel']['name'])
+	elif eraserType == 'older':
+		olderThan = int(ast.literal_eval(section.get('OlderThan')))
+		if args.verbose != None :
+			print("Deleting messages older than ", olderThan, " days with request: \"", searchRequest, "\" and count:", searchCount)
+
+		searchRequest = searchRequest + " before:" + time.strftime("%Y-%m-%d", time.gmtime(time.time()-olderThan*24*60*60))
+		searchResponse = slack.search.messages(searchRequest, "timestamp", "desc", None, searchCount)
+		messages = searchResponse.body['messages']['matches']
+		for message in messages:
+			if args.dry_run == None:
+				if args.verbose != None:
+					print("Deleting message timestamp", message['ts'], "in channel", message['channel']['name'])
+				slack.chat.delete(message['channel']['id'], message['ts'])
+				time.sleep(60/50)
+			else:
+				if args.verbose != None:
+					print("Should have deleted message timestamp", message['ts'], "in channel", message['channel']['name'])
 	else:
 		print("Unknown type ", eraserType, " in section", sectionName)
 
