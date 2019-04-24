@@ -4,5 +4,5 @@ build:
 push-login:
 	docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}"
 	
-push5: push-login
+push: push-login
 	docker push napnap75/rpi-samba:latest
