@@ -10,6 +10,7 @@ notifications:
     on_success: change
     
 env:
+  - IMAGE=samba
   - IMAGE=music-server
   - IMAGE=mopidy-snapcast-controller
   - IMAGE=mopidy
