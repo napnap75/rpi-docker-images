@@ -9,7 +9,7 @@ FROM arm32v6/alpine:latest
 
 COPY --from=builder /tmp/qemu-arm-static /usr/bin
 
-RUN apk add --no-cache py3-pip py3-cffi \
+RUN apk add --no-cache py2-pip py2-cffi \
 	&& pip install docker-compose
 
 ENTRYPOINT ["/usr/bin/docker-compose"]
