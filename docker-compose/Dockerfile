@@ -9,8 +9,9 @@ FROM arm32v6/alpine:latest
 
 COPY --from=builder /tmp/qemu-arm-static /usr/bin
 
-RUN apk add --no-cache --virtual .build-dependencies py2-pip gcc make python2-dev musl-dev libffi-dev libressl-dev \
-	&& pip install docker-compose \
+RUN apk add --no-cache python2 \
+	&& apk add --no-cache --virtual .build-dependencies py2-pip gcc make python2-dev musl-dev libffi-dev libressl-dev \
+	&& pip install --no-cache-dir docker-compose \
 	&& apk del .build-dependencies
 
 ENTRYPOINT ["/usr/bin/docker-compose"]
