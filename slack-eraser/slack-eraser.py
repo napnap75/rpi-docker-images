@@ -146,7 +146,6 @@ for sectionName in config.sections():
 					if args.verbose != None and args.verbose > 1:
 						print(text, "--> Alert '", match.group(2), "' closed")
 				elif match.group(1) in openStatus:
-					openedAlerts.append(match.group(2))
 					if match.group(2) in closedAlerts:
 						if args.verbose != None and args.verbose > 1:
 							print(text, "--> Alert '", match.group(2), "' already closed")
@@ -156,13 +155,14 @@ for sectionName in config.sections():
 					else:
 						if args.verbose != None and args.verbose > 1:
 							print(text, "--> Alert '", match.group(2), "' not closed")
+
+						openedAlerts.append(match.group(2))
 						continue
 				elif match.group(2) in closedStatus:
 					closedAlerts.append(match.group(1))
 					if args.verbose != None and args.verbose > 1:
 						print(text, "--> Alert '", match.group(1), "' closed")
 				elif match.group(2) in openStatus:
-					openedAlerts.append(match.group(1))
 					if match.group(1) in closedAlerts:
 						if args.verbose != None and args.verbose > 1:
 							print(text, "--> Alert '", match.group(1), "' already closed")
@@ -172,6 +172,8 @@ for sectionName in config.sections():
 					else:
 						if args.verbose != None and args.verbose > 1:
 							print(text, "--> Alert '", match.group(1), "' not closed")
+
+						openedAlerts.append(match.group(1))
 						continue
 				else:
 					if args.verbose != None and args.verbose > 1:
