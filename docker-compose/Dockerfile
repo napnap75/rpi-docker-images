@@ -9,7 +9,7 @@ FROM arm32v6/alpine:latest
 
 COPY --from=builder /tmp/qemu-arm-static /usr/bin
 
-RUN apk add --no-cache --virtual .build-dependencies py2-pip gcc python2-dev linux-headers \
+RUN apk add --no-cache --virtual .build-dependencies py2-pip gcc python2-dev musl-dev \
 	&& pip install docker-compose \
 	&& apk del .build-dependencies
 
