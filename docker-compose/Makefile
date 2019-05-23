@@ -2,6 +2,7 @@ all: build push
 
 build:
 	docker build -t napnap75/rpi-docker-compose:latest .
+	docker run --rm -it napnap75/rpi-docker-compose:latest -v
 
 push:
 	if [ "${DOCKER_USERNAME}" != "" ]; then docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}" ; fi
