@@ -116,6 +116,7 @@ for sectionName in config.sections():
 		searchResponse = slack.search.messages(searchRequest, searchSort, searchOrder, None, searchCount)
 		messages = searchResponse.body['messages']['matches']
 		closedAlerts = []
+		openedAlerts = []
 		for message in messages:
 			text = message['text']
 			if text == "":
@@ -145,9 +146,13 @@ for sectionName in config.sections():
 					if args.verbose != None and args.verbose > 1:
 						print(text, "--> Alert '", match.group(2), "' closed")
 				elif match.group(1) in openStatus:
+					openedAlerts.append(match.group(2))
 					if match.group(2) in closedAlerts:
 						if args.verbose != None and args.verbose > 1:
 							print(text, "--> Alert '", match.group(2), "' already closed")
+					elif match.group(2) in openedAlerts:
+						if args.verbose != None and args.verbose > 1:
+							print(text, "--> Alert '", match.group(2), "' not closed but already seen")
 					else:
 						if args.verbose != None and args.verbose > 1:
 							print(text, "--> Alert '", match.group(2), "' not closed")
@@ -157,9 +162,13 @@ for sectionName in config.sections():
 					if args.verbose != None and args.verbose > 1:
 						print(text, "--> Alert '", match.group(1), "' closed")
 				elif match.group(2) in openStatus:
+					openedAlerts.append(match.group(1))
 					if match.group(1) in closedAlerts:
 						if args.verbose != None and args.verbose > 1:
 							print(text, "--> Alert '", match.group(1), "' already closed")
+					elif match.group(1) in openedAlerts:
+						if args.verbose != None and args.verbose > 1:
+							print(text, "--> Alert '", match.group(1), "' not closed but already seen")
 					else:
 						if args.verbose != None and args.verbose > 1:
 							print(text, "--> Alert '", match.group(1), "' not closed")
