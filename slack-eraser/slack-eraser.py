@@ -119,7 +119,7 @@ for sectionName in config.sections():
 		openedAlerts = []
 		for message in messages:
 			text = message['text']
-			if text == "":
+			if text is None or text == "":
 				try:
 					text = message['attachments'][0]['fallback']
 				except KeyError as ex:
