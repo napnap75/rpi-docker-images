@@ -10,4 +10,6 @@ push: login
 	docker push napnap75/rpi-snips-google-tts
 
 test:
-	docker run --rm -it napnap75/rpi-snips-google-tts --server tcp://iot.eclipse.org:1883
+	docker run --rm --name mosquitto -d eclipse-mosquitto
+	docker run --rm -it --link mosquitto napnap75/rpi-snips-google-tts --server tcp://mosquitto:1883
+	docker stop mosquitto
