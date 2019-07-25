@@ -10,5 +10,4 @@ push: login
 	docker push napnap75/rpi-snips-google-tts
 
 test:
-	docker run --rm -it napnap75/rpi-snips-google-tts --help
-	docker run --rm -it napnap75/rpi-snips-google-tts --server tcp://iot.eclipse.org:1883  --clientid gotrivial
+	docker run --rm -it napnap75/rpi-snips-google-tts --server tcp://iot.eclipse.org:1883
