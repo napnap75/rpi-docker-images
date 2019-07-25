@@ -11,23 +11,19 @@ import (
 	"log"
 	"os"
 	"os/signal"
-//	"strconv"
 	"syscall"
-//	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 	texttospeech "cloud.google.com/go/texttospeech/apiv1"
 	texttospeechpb "google.golang.org/genproto/googleapis/cloud/texttospeech/v1"
-	"google.golang.org/api/option"
 )
 
-var googleApiKey string
 var googleVoice string
 
-func getAudioFileFromGoogle(apiKey string, textInput string, voiceName string, filename string) {
+func getAudioFileFromGoogle(textInput string, filename string) {
 	// Instantiates a client.
 	ctx := context.Background()
-	client, err := texttospeech.NewClient(ctx, option.WithAPIKey(apiKey))
+	client, err := texttospeech.NewClient(ctx)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -40,11 +36,12 @@ func getAudioFileFromGoogle(apiKey string, textInput string, voiceName string, f
 		},
 		// Build the voice request, select the voice
 		Voice: &texttospeechpb.VoiceSelectionParams{
-			Name: voiceName,
+			LanguageCode: "fr-FR",
+			Name: googleVoice,
 		},
 		// Select the type of audio file you want returned.
 		AudioConfig: &texttospeechpb.AudioConfig{
-			AudioEncoding: texttospeechpb.AudioEncoding_MP3,
+			AudioEncoding: texttospeechpb.AudioEncoding_LINEAR16,
 			EffectsProfileId: []string{"small-bluetooth-speaker-class-device"},
 		},
 	}
@@ -72,9 +69,12 @@ func getAudioFileFromGoogle(apiKey string, textInput string, voiceName string, f
 
 func onMessageReceived(client mqtt.Client, message mqtt.Message) {
 	log.Print("Received message on topic: %s\nMessage: %s\n", message.Topic(), message.Payload())
-	
+
+	// Decode the message
 	type Payload struct {
 		text []byte `json:"text"`
+		requestId []byte `json:"id"`
+		sessionId []byte `json:"sessionId"`
 	}
 	var messagePayload Payload
 	err := json.Unmarshal(message.Payload(), &messagePayload)
@@ -82,10 +82,21 @@ func onMessageReceived(client mqtt.Client, message mqtt.Message) {
 		log.Fatal(err)
 	}
 
-	if messagePayload.text != "" {
-		hash := md5.Sum(messagePayload.text)
-
+	// Get the audio file from Google TTS if necessary
+	hash := fmt.Sprintf("%x", md5.Sum(messagePayload.text))
+	if _, err := os.Stat("/tmp/messages/" + hash); os.IsNotExist(err) {
+		getAudioFileFromGoogle(string(messagePayload.text), "/tmp/messages/" + hash)
 	}
+
+	// Sent the audio file
+	audio, err := ioutil.ReadFile("/tmp/messages/" + hash)
+	if err != nil {
+		log.Fatal(err)
+	}
+	client.Publish(fmt.Sprintf("hermes/audioServer/default/playBytes/%s", hash), 0, false, audio)
+
+	// Answer back
+	client.Publish("hermes/tts/sayFinished", 0, false, []byte(fmt.Sprintf("{\"id\": \"%x\", \"sessionId\": \"%x\"}", messagePayload.requestId, messagePayload.sessionId)))
 }
 
 func mqttConnectAndSubscribe(server string, clientid string, username string, password string) {
@@ -126,14 +137,12 @@ func main() {
 	mqttClientid := flag.String("mqtt-clientid", "snips-google-tts", "A clientid for the connection")
 	mqttUsername := flag.String("mqtt-username", "", "A username to authenticate to the MQTT server")
 	mqttPassword := flag.String("mqtt-password", "", "Password to match username")
-	flag.StringVar(&googleApiKey, "google-api-key", "", "Google Cloud API Key")
+//	flag.StringVar(&googleApiKey, "google-api-key", "", "Google Cloud API Key")
 	flag.StringVar(&googleVoice, "google-voice", "fr-FR-Wavenet-C", "Google TTS voice identifier")
 	flag.Parse()
 
 	// Connect to MQTT
 	mqttConnectAndSubscribe(*mqttServer, *mqttClientid, *mqttUsername, *mqttPassword)
-
-	getAudioFileFromGoogle(googleApiKey, "J'ai ajoute du pain", googleVoice, "test.mp3")
 
 	<-c
 }
