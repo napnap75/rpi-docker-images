@@ -42,7 +42,7 @@ func getAudioFileFromGoogle(textInput string, filename string) {
 		// Select the type of audio file you want returned.
 		AudioConfig: &texttospeechpb.AudioConfig{
 			AudioEncoding: texttospeechpb.AudioEncoding_LINEAR16,
-			EffectsProfileId: []string{"small-bluetooth-speaker-class-device"},
+			// EffectsProfileId: []string{"small-bluetooth-speaker-class-device"},
 		},
 	}
 
@@ -64,17 +64,19 @@ func getAudioFileFromGoogle(textInput string, filename string) {
 		log.Fatal(err)
 	}
 
-	log.Print("Audio content written to file: %v\n", filename)
+	log.Printf("The message %v was written to file: %v\n", textInput, filename)
 }
 
 func onMessageReceived(client mqtt.Client, message mqtt.Message) {
-	log.Print("Received message on topic: %s\nMessage: %s\n", message.Topic(), message.Payload())
+	log.Printf("Received message on topic: %+v\nMessage: %+v\n", message.Topic(), message.Payload())
+	log.Printf("Received message on topic: %s\nMessage: %s\n", string(message.Topic()), string(message.Payload()))
 
 	// Decode the message
 	type Payload struct {
-		text []byte `json:"text"`
-		requestId []byte `json:"id"`
-		sessionId []byte `json:"sessionId"`
+		Text string `json:"text"`
+		RequestId string `json:"id"`
+		SiteId string `json:"siteId"`
+		SessionId string `json:"sessionId"`
 	}
 	var messagePayload Payload
 	err := json.Unmarshal(message.Payload(), &messagePayload)
@@ -82,10 +84,16 @@ func onMessageReceived(client mqtt.Client, message mqtt.Message) {
 		log.Fatal(err)
 	}
 
+	log.Printf("Full message: %+v\n", messagePayload.Text)
+	log.Printf("Message text: %s\n", messagePayload.Text)
+
 	// Get the audio file from Google TTS if necessary
-	hash := fmt.Sprintf("%x", md5.Sum(messagePayload.text))
+	hash := fmt.Sprintf("%x", md5.Sum([]byte(messagePayload.Text)))
+
+	log.Printf("Message hash: %s\n", hash)
+
 	if _, err := os.Stat("/tmp/messages/" + hash); os.IsNotExist(err) {
-		getAudioFileFromGoogle(string(messagePayload.text), "/tmp/messages/" + hash)
+		getAudioFileFromGoogle(string(messagePayload.Text), "/tmp/messages/" + hash)
 	}
 
 	// Sent the audio file
@@ -96,7 +104,7 @@ func onMessageReceived(client mqtt.Client, message mqtt.Message) {
 	client.Publish(fmt.Sprintf("hermes/audioServer/default/playBytes/%s", hash), 0, false, audio)
 
 	// Answer back
-	client.Publish("hermes/tts/sayFinished", 0, false, []byte(fmt.Sprintf("{\"id\": \"%x\", \"sessionId\": \"%x\"}", messagePayload.requestId, messagePayload.sessionId)))
+	client.Publish("hermes/tts/sayFinished", 0, false, []byte(fmt.Sprintf("{\"id\": \"%x\", \"sessionId\": \"%x\"}", messagePayload.RequestId, messagePayload.SessionId)))
 }
 
 func mqttConnectAndSubscribe(server string, clientid string, username string, password string) {
