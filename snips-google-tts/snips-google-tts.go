@@ -42,7 +42,8 @@ func getAudioFileFromGoogle(textInput string, filename string) {
 		// Select the type of audio file you want returned.
 		AudioConfig: &texttospeechpb.AudioConfig{
 			AudioEncoding: texttospeechpb.AudioEncoding_LINEAR16,
-			// EffectsProfileId: []string{"small-bluetooth-speaker-class-device"},
+			EffectsProfileId: []string{"small-bluetooth-speaker-class-device"},
+			Pitch: -2,
 		},
 	}
 
@@ -145,8 +146,7 @@ func main() {
 	mqttClientid := flag.String("mqtt-clientid", "snips-google-tts", "A clientid for the connection")
 	mqttUsername := flag.String("mqtt-username", "", "A username to authenticate to the MQTT server")
 	mqttPassword := flag.String("mqtt-password", "", "Password to match username")
-//	flag.StringVar(&googleApiKey, "google-api-key", "", "Google Cloud API Key")
-	flag.StringVar(&googleVoice, "google-voice", "fr-FR-Wavenet-C", "Google TTS voice identifier")
+	flag.StringVar(&googleVoice, "google-voice", "fr-FR-Wavenet-A", "Google TTS voice identifier")
 	flag.Parse()
 
 	// Connect to MQTT
