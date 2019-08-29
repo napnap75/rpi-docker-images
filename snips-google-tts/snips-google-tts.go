@@ -64,13 +64,10 @@ func getAudioFileFromGoogle(textInput string, filename string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	log.Printf("The message %v was written to file: %v\n", textInput, filename)
 }
 
 func onMessageReceived(client mqtt.Client, message mqtt.Message) {
-	log.Printf("Received message on topic: %+v\nMessage: %+v\n", message.Topic(), message.Payload())
-	log.Printf("Received message on topic: %s\nMessage: %s\n", string(message.Topic()), string(message.Payload()))
+	log.Printf("Received message on topic %s: '%s'\n", string(message.Topic()), string(message.Payload()))
 
 	// Decode the message
 	type Payload struct {
@@ -85,20 +82,19 @@ func onMessageReceived(client mqtt.Client, message mqtt.Message) {
 		log.Fatal(err)
 	}
 
-	log.Printf("Full message: %+v\n", messagePayload.Text)
-	log.Printf("Message text: %s\n", messagePayload.Text)
-
 	// Get the audio file from Google TTS if necessary
 	hash := fmt.Sprintf("%x", md5.Sum([]byte(messagePayload.Text)))
+	filename := "/tmp/messages/" + hash + ".wav"
 
-	log.Printf("Message hash: %s\n", hash)
-
-	if _, err := os.Stat("/tmp/messages/" + hash); os.IsNotExist(err) {
-		getAudioFileFromGoogle(string(messagePayload.Text), "/tmp/messages/" + hash)
+	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		getAudioFileFromGoogle(string(messagePayload.Text), filename)
+		log.Printf("Got audio from Google and wrote it to file: %v\n", filename)
+	} else {
+		log.Printf("Loaded audio from file: %v\n", filename)
 	}
 
 	// Sent the audio file
-	audio, err := ioutil.ReadFile("/tmp/messages/" + hash)
+	audio, err := ioutil.ReadFile(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -120,12 +116,12 @@ func mqttConnectAndSubscribe(server string, clientid string, username string, pa
 	connOpts.SetTLSConfig(tlsConfig)
 	connOpts.OnConnect = func(c mqtt.Client) {
 		if token := c.Subscribe("hermes/tts/say", 0, onMessageReceived); token.Wait() && token.Error() != nil {
-			panic(token.Error())
+			log.Fatal(token.Error())
 		}
 	}
 	client := mqtt.NewClient(connOpts)
 	if token := client.Connect(); token.Wait() && token.Error() != nil {
-		panic(token.Error())
+		log.Fatal(token.Error())
 	} else {
 		fmt.Printf("Connected to %s\n", server)
 	}
@@ -134,7 +130,7 @@ func mqttConnectAndSubscribe(server string, clientid string, username string, pa
 
 func main() {
 	// Logs
-	mqtt.DEBUG = log.New(os.Stdout, "", 0)
+	//mqtt.DEBUG = log.New(os.Stdout, "", 0)
 	mqtt.ERROR = log.New(os.Stdout, "", 0)
 
 	// Handle interrupts to clean properly
