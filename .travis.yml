@@ -20,7 +20,6 @@ env:
   - IMAGE=snips-led-control
   - IMAGE=restic
   - IMAGE=docker-compose
-  - IMAGE=picocms
   - IMAGE=gitea
   - IMAGE=sshd
   - IMAGE=borg
