@@ -18,7 +18,8 @@ import (
 	texttospeechpb "google.golang.org/genproto/googleapis/cloud/texttospeech/v1"
 )
 
-var googleVoice string
+var voice string
+var rate, pitch, gain float64
 
 func getAudioFileFromGoogle(textInput string, filename string) {
 	// Instantiates a client.
@@ -37,13 +38,15 @@ func getAudioFileFromGoogle(textInput string, filename string) {
 		// Build the voice request, select the voice
 		Voice: &texttospeechpb.VoiceSelectionParams{
 			LanguageCode: "fr-FR",
-			Name: googleVoice,
+			Name: voice,
 		},
 		// Select the type of audio file you want returned.
 		AudioConfig: &texttospeechpb.AudioConfig{
 			AudioEncoding: texttospeechpb.AudioEncoding_LINEAR16,
 			EffectsProfileId: []string{"small-bluetooth-speaker-class-device"},
-			Pitch: -2,
+			SpeakingRate: rate,
+			Pitch: pitch,
+			VolumeGainDb: gain,
 		},
 	}
 
@@ -142,7 +145,10 @@ func main() {
 	mqttClientid := flag.String("mqtt-clientid", "snips-google-tts", "A clientid for the connection")
 	mqttUsername := flag.String("mqtt-username", "", "A username to authenticate to the MQTT server")
 	mqttPassword := flag.String("mqtt-password", "", "Password to match username")
-	flag.StringVar(&googleVoice, "google-voice", "fr-FR-Wavenet-A", "Google TTS voice identifier")
+	flag.StringVar(&voice, "voice", "fr-FR-Wavenet-A", "Google TTS voice identifier")
+	flag.Float64Var(&rate, "rate", 1, "Google TTS speaking rate")
+	flag.Float64Var(&pitch, "pitch", 0, "Google TTS speaking pitch")
+	flag.Float64Var(&gain, "gain", 0, "Google TTS speaking volume gain")
 	flag.Parse()
 
 	// Connect to MQTT
