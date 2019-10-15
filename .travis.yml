@@ -10,6 +10,7 @@ notifications:
     on_success: change
     
 env:
+  - IMAGE=http-tunnel
   - IMAGE=snips-google-tts
   - IMAGE=samba
   - IMAGE=music-server
