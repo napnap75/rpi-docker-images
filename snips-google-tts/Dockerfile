@@ -10,7 +10,7 @@ RUN apk add --no-cache git gcc musl-dev \
 	&& GOOS=linux GOARCH=arm GOARM=6 go build -ldflags="-w -s" -o /go/bin/snips-google-tts
 
 FROM arm32v6/alpine:latest
-COPY --from=builder qemu-arm-static /go/bin/snips-google-tts /usr/bin/
+COPY --from=builder /qemu-arm-static /go/bin/snips-google-tts /usr/bin/
 ENV GOOGLE_APPLICATION_CREDENTIALS=/google-credentials.json
 RUN apk add --no-cache ca-certificates
 VOLUME /tmp/messages
