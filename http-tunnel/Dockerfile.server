@@ -11,4 +11,6 @@ RUN apk add --no-cache curl \
 FROM arm32v6/alpine:latest
 
 COPY --from=builder qemu-arm-static tunneld /usr/bin/
+RUN adduser -DH tunnel
+USER tunnel
 ENTRYPOINT ["/usr/bin/tunneld"]
