@@ -12,7 +12,10 @@ RUN apk add --no-cache curl git \
 
 FROM arm32v6/alpine:latest
 
-COPY --from=builder /go/qemu-arm-static /go/src/github.com/restic/rest-server/rest-server /usr/bin/
-RUN adduser -DH rest-server
+COPY --from=builder /go/qemu-arm-static /go/src/github.com/restic/rest-server/rest-server /go/src/github.com/restic/rest-server/docker/* /usr/bin/
+RUN apk add --no-cache apache2-utils \
+	&& adduser -DH rest-server
 USER rest-server
-ENTRYPOINT ["/usr/bin/rest-server"]
+VOLUME /data
+ENV DATA_DIRECTORY=/data PASSWORD_FILE=/data/.htpasswd
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
