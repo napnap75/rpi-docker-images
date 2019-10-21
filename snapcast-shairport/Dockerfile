@@ -1,4 +1,4 @@
-FROM napnap75/rpi-alpine-base:3.8 AS builder
+FROM napnap75/rpi-alpine-base:latest AS builder
 
 RUN apk update \
 	&& apk add git build-base autoconf automake libtool alsa-lib-dev libdaemon-dev popt-dev libressl-dev soxr-dev avahi-dev libconfig-dev curl asio-dev flac-dev libvorbis-dev \
@@ -16,7 +16,7 @@ RUN apk update \
 	&& make server
 
 
-FROM napnap75/rpi-alpine-base:3.8
+FROM napnap75/rpi-alpine-base:latest
 
 RUN apk add --no-cache avahi-libs flac libvorbis dbus alsa-lib libdaemon popt libressl soxr avahi libconfig
 
