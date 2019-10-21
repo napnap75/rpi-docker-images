@@ -20,6 +20,7 @@ env:
   - IMAGE=mqtt-watch
   - IMAGE=snips-led-control
   - IMAGE=restic
+  - IMAGE=restic-rest
   - IMAGE=docker-compose
   - IMAGE=gitea
   - IMAGE=sshd
