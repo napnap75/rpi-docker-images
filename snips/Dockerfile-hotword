@@ -1,0 +1,5 @@
+FROM napnap75/rpi-snips:common
+
+RUN apt-get install -y libasound2 snips-hotword
+
+CMD /usr/bin/snips-hotword
