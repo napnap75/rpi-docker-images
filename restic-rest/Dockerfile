@@ -8,6 +8,7 @@ RUN apk add --no-cache curl git \
 	&& cd /go/src/github.com/restic \
 	&& git clone https://github.com/restic/rest-server \
 	&& cd rest-server \
+	&& go mod vendor \
 	&& go run build.go -v --goos linux --goarch arm
 
 FROM arm32v6/alpine:latest
