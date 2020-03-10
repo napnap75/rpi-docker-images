@@ -9,18 +9,13 @@ RUN apk update \
 	&& tar xzf /tmp/shairport-sync.tar.gz --strip-components=1 \
 	&& autoreconf -i -f \
 	&& ./configure --with-stdout --with-pipe --with-avahi --with-ssl=openssl --with-soxr --with-metadata \
-	&& make \
-	&& cd /root \
-	&& git clone --recursive https://github.com/badaix/snapcast.git \
-	&& cd snapcast \
-	&& make server
-
+	&& make
 
 FROM napnap75/rpi-alpine-base:latest
 
-RUN apk add --no-cache avahi-libs flac libvorbis dbus alsa-lib libdaemon popt libressl soxr avahi libconfig
+RUN apk add --no-cache snapcast-server avahi-libs flac libvorbis dbus alsa-lib libdaemon popt libressl soxr avahi libconfig
 
-COPY --from=builder /root/shairport-sync/shairport-sync /root/snapcast/server/snapserver /usr/local/bin/
+COPY --from=builder /root/shairport-sync/shairport-sync /usr/local/bin/
 COPY start.sh /usr/local/bin
 
 ENV AIRPLAY_NAME=snapcast BUFFER_SIZE=1000
