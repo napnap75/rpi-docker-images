@@ -1,4 +1,4 @@
-FROM golang:alpine AS builder
+FROM golang:1.13-alpine AS builder
 
 RUN apk add --no-cache curl git \
         && while [ "$QEMU_DOWNLOAD_URL" == "" ] ; do QEMU_DOWNLOAD_URL=$(curl -s https://api.github.com/repos/multiarch/qemu-user-static/releases/latest | grep "browser_download_url" | grep "\/qemu-arm-static.tar.gz" | cut -d\" -f4) ; done \
@@ -8,7 +8,6 @@ RUN apk add --no-cache curl git \
 	&& cd /go/src/github.com/restic \
 	&& git clone https://github.com/restic/rest-server \
 	&& cd rest-server \
-	&& go mod vendor \
 	&& go run build.go -v --goos linux --goarch arm
 
 FROM arm32v6/alpine:latest
