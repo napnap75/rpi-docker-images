@@ -19,7 +19,6 @@ env:
   - IMAGE=mopidy
   - IMAGE=mqtt-warn
   - IMAGE=mqtt-watch
-  - IMAGE=snips-led-control
   - IMAGE=restic
   - IMAGE=restic-rest
   - IMAGE=docker-compose
