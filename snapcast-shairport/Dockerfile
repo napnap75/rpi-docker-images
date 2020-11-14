@@ -8,7 +8,7 @@ RUN apk update \
 	&& curl --retry 3 -L -s -o /tmp/shairport-sync.tar.gz $DOWNLOAD_URL \
 	&& tar xzf /tmp/shairport-sync.tar.gz --strip-components=1 \
 	&& autoreconf -i -f \
-	&& ./configure --with-stdout --with-pipe --with-avahi --with-ssl=openssl --with-soxr --with-metadata \
+	&& ./configure --with-stdout --with-pipe --with-avahi --with-ssl=openssl --with-soxr --with-metadata --with-mqtt-client  \
 	&& make
 
 FROM napnap75/rpi-alpine-base:latest
