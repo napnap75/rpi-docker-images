@@ -1,7 +1,7 @@
 FROM napnap75/rpi-alpine-base:latest AS builder
 
 RUN apk update \
-	&& apk add git build-base autoconf automake libtool alsa-lib-dev libdaemon-dev popt-dev libressl-dev soxr-dev avahi-dev libconfig-dev curl asio-dev flac-dev libvorbis-dev libmosquitto-dev \
+	&& apk add git build-base autoconf automake libtool alsa-lib-dev libdaemon-dev popt-dev libressl-dev soxr-dev avahi-dev libconfig-dev curl asio-dev flac-dev libvorbis-dev mosquitto-dev \
 	&& mkdir /root/shairport-sync \
 	&& cd /root/shairport-sync \
 	&& while [ "$DOWNLOAD_URL" == "" ] ; do DOWNLOAD_URL=$(curl -s https://api.github.com/repos/mikebrady/shairport-sync/releases/latest | grep "tarball_url" | cut -d\" -f4) ; done \
