@@ -13,7 +13,7 @@ RUN apk update \
 
 FROM napnap75/rpi-alpine-base:latest
 
-RUN apk add --no-cache snapcast-server avahi-libs flac libvorbis dbus alsa-lib libdaemon popt libressl soxr avahi libconfig
+RUN apk add --no-cache snapcast-server avahi-libs flac libvorbis dbus alsa-lib libdaemon popt libressl soxr avahi libconfig mosquitto-libs
 
 COPY --from=builder /root/shairport-sync/shairport-sync /usr/local/bin/
 COPY start.sh /usr/local/bin
