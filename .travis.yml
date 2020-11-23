@@ -10,6 +10,7 @@ notifications:
     on_success: change
     
 env:
+  - IMAGE=piwigo-souvenirs
   - IMAGE=matterbridge
   - IMAGE=evdev-mqtt
   - IMAGE=http-tunnel
