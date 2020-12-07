@@ -10,6 +10,7 @@ notifications:
     on_success: change
     
 env:
+  - IMAGE=nfc-mqtt-bridge
   - IMAGE=piwigo-souvenirs
   - IMAGE=matterbridge
   - IMAGE=evdev-mqtt

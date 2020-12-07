@@ -1,0 +1,16 @@
+# Warning only
+log-level: 30
+
+# MQTT broker to connect to
+mqtt:
+  host: mosquitto-server
+  port: 1883
+
+# Commands to send when a tag is read
+commands:
+  my-tag-id:
+    - topic: "first/topic"
+      message: "First message"
+    - topic: "second/topic"
+      message: "Second message"
+
