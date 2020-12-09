@@ -1,5 +1,3 @@
-all: build push clean
-
 build: build-server build-client test
 
 build-pre:

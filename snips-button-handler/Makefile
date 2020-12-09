@@ -1,5 +1,3 @@
-all: build push
-
 build:
 	docker build -t napnap75/rpi-snips-button-handler:latest .
 

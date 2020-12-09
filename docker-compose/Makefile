@@ -1,5 +1,3 @@
-all: build push
-
 build:
 	docker build -t napnap75/rpi-docker-compose:latest .
 

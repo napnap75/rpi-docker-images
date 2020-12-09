@@ -1,5 +1,3 @@
-all: build push
-
 build:
 	docker build -t napnap75/rpi-snips:common -f Dockerfile-common .
 	set -e ; for template in analytics asr audio-server dialogue nlu tts watch ; do \
@@ -10,10 +8,8 @@ build:
 		docker build -t napnap75/rpi-snips:$$template -f Dockerfile-$$template . ; \
 	done
 
-login:
+push:
 	if [ "${DOCKER_USERNAME}" != "" ]; then docker login -u="${DOCKER_USERNAME}" -p="${DOCKER_PASSWORD}" ; fi
-
-push: login
 	set -e ; for template in analytics asr audio-server hotword dialogue nlu skill-server tts watch ; do \
 		docker push napnap75/rpi-snips:$$template ; \
 		version=$$(docker run --rm -it napnap75/rpi-snips:$$template /usr/bin/snips-$$template --version | egrep -o "\([0-9\.]+\)" | egrep -o "[0-9]+\.[0-9]+\.[0-9]+") ; \
