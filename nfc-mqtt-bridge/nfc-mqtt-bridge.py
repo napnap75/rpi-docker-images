@@ -6,6 +6,7 @@ from digitalio import DigitalInOut
 from adafruit_pn532.spi import PN532_SPI
 import paho.mqtt.client as mqtt
 import logging
+import sys
 import time
 import yaml
 
@@ -14,15 +15,15 @@ with open('config.yml') as f:
 	configuration = yaml.load(f, Loader=yaml.FullLoader)
 
 # Initiate logging
-logger = logging.getLogger(__name__)
-logger.setLevel(int(configuration['log-level']))
+logging.basicConfig(stream=sys.stdout, level=int(configuration['log-level']))
+logger = logging.getLogger()
 
 # SPI connection:
 spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
 cs_pin = DigitalInOut(board.D5)
 pn532 = PN532_SPI(spi, cs_pin, debug=False)
 ic, ver, rev, support = pn532.firmware_version
-logger.info('Found PN532 with firmware version: {0}.{1}'.format(ver, rev))
+logging.info('Found PN532 with firmware version: {0}.{1}'.format(ver, rev))
 pn532.SAM_configuration()
 
 # MQTT connection:
@@ -33,7 +34,7 @@ mqtt_client.loop_start()
 
 # Wait for tag
 last_uid = None
-logger.info('Waiting for RFID/NFC card...')
+logger.debug('Waiting for RFID/NFC card...')
 while True:
 	uid = pn532.read_passive_target()
 	if uid is None:
@@ -49,7 +50,7 @@ while True:
 	logger.info('Found card with UID: %s', string_uid)
 	try:
 		for messages in configuration['commands'][string_uid]:
-			logger.info('Publishing: %s to topic %s', messages['message'], messages['topic'])
+			logger.debug('Publishing: %s to topic %s', messages['message'], messages['topic'])
 			mqtt_client.publish(messages['topic'], messages['message'])
 			time.sleep(1)
 	except KeyError:
