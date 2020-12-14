@@ -23,7 +23,6 @@ env:
   - IMAGE=mopidy
   - IMAGE=mqtt-warn
   - IMAGE=mqtt-watch
-  - IMAGE=restic
   - IMAGE=restic-rest
   - IMAGE=docker-compose
   - IMAGE=gitea
