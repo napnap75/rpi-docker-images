@@ -7,7 +7,7 @@ while true ; do
   my_ip=$(curl -s https://api.ipify.org)
 
   # Get my currently registered IP
-  current_record=$(curl -s -H"X-Api-Key: $GANDI_API_KEY" https://dns.api.gandi.net/api/v5/domains/$GANDI_DOMAIN/records | jq -c '.[] | select(.rrset_name == "'$GANDI_HOST'")')
+  current_record=$(curl -s -H"X-Api-Key: $GANDI_API_KEY" https://dns.api.gandi.net/api/v5/domains/$GANDI_DOMAIN/records | jq -c '.[] | select(.rrset_name == "'$GANDI_HOST'") | select(.rrset_type == "A")')
   current_ip=$(echo $current_record | jq -r '.rrset_values[0]')
 
   # If they do not match, change it (and keep the TTL and TYPE)
