@@ -15,6 +15,11 @@ while true ; do
     echo "Updating $GANDI_HOST.$GANDI_DOMAIN record with IP $my_ip"
     current_ttl=$(echo $current_record | jq -r '.rrset_ttl')
     curl -s -X PUT -H "Content-Type: application/json" -H "X-Api-Key: $GANDI_API_KEY" -d '{"rrset_ttl": '$current_ttl', "rrset_values":["'$my_ip'"]}' https://dns.api.gandi.net/api/v5/domains/$GANDI_DOMAIN/records/$GANDI_HOST/A
+
+    # Send a notification to Slack
+    if [[ "$SLACK_URL" != "" ]] ; then
+      curl -s -X POST --data-urlencode "payload={\"username\": \"gandi\", \"icon_emoji\": \":dart:\", \"text\": \"New IP $my_ip for host $GANDI_HOST.$GANDI_DOMAIN\"}" $SLACK_URL
+    fi
   fi
 
   # Wait 5 minutes
