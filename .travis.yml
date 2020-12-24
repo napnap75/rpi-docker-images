@@ -11,10 +11,8 @@ notifications:
     
 env:
   - IMAGE=snapcast-client
-  - IMAGE=nfc-mqtt-bridge
   - IMAGE=piwigo-souvenirs
   - IMAGE=matterbridge
-  - IMAGE=evdev-mqtt
   - IMAGE=http-tunnel
   - IMAGE=snips-google-tts
   - IMAGE=samba
