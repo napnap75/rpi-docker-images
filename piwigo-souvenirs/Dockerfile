@@ -6,6 +6,7 @@ RUN apk add --no-cache curl \
 WORKDIR $GOPATH/src/napnap75/piwigo-souvenirs/
 COPY piwigo-souvenirs.go .
 RUN apk add --no-cache git gcc musl-dev \
+	&& go mod init github.com/napnap75/rpi-docker-files/piwigo-souvenirs \
 	&& go get -d -v \
 	&& GOOS=linux GOARCH=arm GOARM=6 go build -ldflags="-w -s" -o /go/bin/piwigo-souvenirs
 

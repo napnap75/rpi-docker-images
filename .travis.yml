@@ -10,26 +10,13 @@ notifications:
     on_success: change
     
 env:
-  - IMAGE=snapcast-client
   - IMAGE=piwigo-souvenirs
-  - IMAGE=matterbridge
-  - IMAGE=http-tunnel
   - IMAGE=snips-google-tts
-  - IMAGE=samba
-  - IMAGE=music-server
-  - IMAGE=mopidy-snapcast-controller
   - IMAGE=mopidy
-  - IMAGE=mqtt-warn
-  - IMAGE=mqtt-watch
   - IMAGE=restic-rest
   - IMAGE=docker-compose
-  - IMAGE=gitea
-  - IMAGE=sshd
-  - IMAGE=borg
   - IMAGE=slack-eraser
   - IMAGE=snapcast-shairport
-  - IMAGE=snips
-  - IMAGE=snips-button-handler
   - IMAGE=s6-alpine
   - IMAGE=gandi
 
