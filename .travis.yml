@@ -10,13 +10,11 @@ notifications:
     on_success: change
     
 env:
-  - IMAGE=piwigo-souvenirs
   - IMAGE=snips-google-tts
   - IMAGE=mopidy
   - IMAGE=restic-rest
   - IMAGE=docker-compose
   - IMAGE=slack-eraser
-  - IMAGE=snapcast-shairport
   - IMAGE=s6-alpine
   - IMAGE=gandi
 
